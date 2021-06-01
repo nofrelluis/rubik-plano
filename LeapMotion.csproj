@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{82AFE9FB-1488-B22A-9B7C-DF002F9C8232}</ProjectGuid>
+    <ProjectGuid>{A34D3428-6563-AF3E-07A0-24C77C718463}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>LeapMotion</AssemblyName>
@@ -844,7 +844,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="LeapMotion.LeapCSharp.csproj">
-      <Project>{CDE82D3F-1927-E8B1-9F5C-828EB8F7F2DA}</Project>
+      <Project>{CFA78C51-3705-6EAA-24E7-ADA2F2862C7F}</Project>
       <Name>LeapMotion.LeapCSharp</Name>
     </ProjectReference>
   </ItemGroup>

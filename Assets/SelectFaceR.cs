@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Leap;
 using Leap.Unity;
+using System;
 
 public class SelectFaceR : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class SelectFaceR : MonoBehaviour
     private CubeState cubeState;
     private ReadCube readCube;
     private GameObject target;
+    private Concurrencia concu;
+   
 
     private Quaternion targetQuaternion;
 
@@ -23,12 +26,13 @@ public class SelectFaceR : MonoBehaviour
         readCube = FindObjectOfType<ReadCube>();
         cubeState = FindObjectOfType<CubeState>();
         target = FindObjectOfType<RotateCubeHand>().target;
+        concu = FindObjectsOfType<Concurrencia>()[0];
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+    
     }
     public void GetFirst()
     {
@@ -50,205 +54,227 @@ public class SelectFaceR : MonoBehaviour
 
     public void GetSecondL()
     {
-        //GameObject face = hit.collider.gameObject;
-        // Make a list of all the sides (lists of face GameObjects)
-
-        HandModel handm = GetComponent<HandModel>();
-        Hand hand = handm.GetLeapHand();
-        Vector3 coord = hand.Fingers[1].TipPosition.ToVector3();
-        Vector2 Swipe;
-        if (First != Vector3.zero)
+        try {
+        if (concu.Potgirar())
         {
-            //print("segon");
+            //GameObject face = hit.collider.gameObject;
+            // Make a list of all the sides (lists of face GameObjects)
 
-            Second = coord;
-            Swipe = new Vector2(Second.x - First.x, Second.y - First.y);
-            if (RightSwipe(Swipe))
+            HandModel handm = GetComponent<HandModel>();
+            Hand hand = handm.GetLeapHand();
+            Vector3 coord = hand.Fingers[1].TipPosition.ToVector3();
+            Vector2 Swipe;
+            if (First != Vector3.zero)
             {
-                readCube.ReadState();
-                if (First.y > 0.5)
+                //print("segon");
+
+                Second = coord;
+                Swipe = new Vector2(Second.x - First.x, Second.y - First.y);
+                if (RightSwipe(Swipe))
                 {
-                    print("U'");
-                    cubeState.up[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.up, 90);
+                    readCube.ReadState();
+                    if (First.y > 0.5 && First.x <1)
+                    {
+                        print("U'");
+                        cubeState.up[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.up, 90);
+                    }
+                    else if (-0.5 <= First.y && First.y <= 0.5 && First.x < 1)
+                    {
+                        print("E");
+                        cubeState.up[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.up, -90);
+                        target.transform.Rotate(0, -90, 0, Space.World);
+                        cubeState.down[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.down, 90);
+                    }
+                    else if (First.y < -0.5 && First.x < 1)
+                    {
+                        print("D");
+                        cubeState.down[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.down, -90);
+                    }
                 }
-                else if (-0.5 <= First.y && First.y <= 0.5)
+                else if (UpRightSwipe(Swipe))
                 {
-                    print("E");
-                    cubeState.up[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.up, -90);
-                    target.transform.Rotate(0, -90, 0, Space.World);
-                    cubeState.down[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.down, 90);
+                    readCube.ReadState();
+                    if (First.z > 0.5 && First.x < 1)
+                    {
+                        print("L");
+                        cubeState.left[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.left, 90);
+                    }
+                    else if (-0.5 <= First.z && First.z <= 0.5 && First.x < 1)
+                    {
+                        print("M'");
+                        cubeState.left[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.left, -90);
+                        target.transform.Rotate(0, 0, -90, Space.World);
+                        cubeState.right[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.right, 90);
+                    }
+                    else if (First.z < -0.5 && First.x < 1)
+                    {
+                        print("R'");
+                        cubeState.right[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.right, -90);
+                    }
                 }
-                else if (First.y < -0.5)
+                else if (DownLeftSwipe(Swipe))
                 {
-                    print("D");
-                    cubeState.down[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.down, -90);
+                    readCube.ReadState();
+                    if (First.z > 0.5 && First.x < 1)
+                    {
+                        print("L'");
+                        cubeState.left[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.left, -90);
+                    }
+                    else if (-0.5 <= First.z && First.z <= 0.5 && First.x < 1)
+                    {
+                        print("M");
+                        cubeState.left[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.left, 90);
+                        target.transform.Rotate(0, 0, 90, Space.World);
+                        cubeState.right[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.right, -90);
+                    }
+                    else if (First.z < -0.5 && First.x < 1)
+                    {
+                        print("R");
+                        cubeState.right[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.right, 90);
+                    }
                 }
+                First = Vector3.zero;
             }
-            else if (UpRightSwipe(Swipe))
-            {
-                readCube.ReadState();
-                if (First.z > 0.5)
-                {
-                    print("L");
-                    cubeState.left[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.left, 90);
-                }
-                else if (-0.5 <= First.z && First.z <= 0.5)
-                {
-                    print("M'");
-                    cubeState.left[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.left, -90);
-                    target.transform.Rotate(0, 0, -90, Space.World);
-                    cubeState.right[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.right, 90);
-                }
-                else if (First.z < -0.5)
-                {
-                    print("R'");
-                    cubeState.right[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.right, -90);
-                }
-            }
-            else if (DownLeftSwipe(Swipe))
-            {
-                readCube.ReadState();
-                if (First.z > 0.5)
-                {
-                    print("L'");
-                    cubeState.left[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.left, -90);
-                }
-                else if (-0.5 <= First.z && First.z <= 0.5)
-                {
-                    print("M");
-                    cubeState.left[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.left, 90);
-                    target.transform.Rotate(0, 0, 90, Space.World);
-                    cubeState.right[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.right, -90);
-                }
-                else if (First.z < -0.5)
-                {
-                    print("R");
-                    cubeState.right[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.right, 90);
-                }
-            }
-            First = Vector3.zero;
+            
         }
-
-
+    }
+        catch (Exception e) { print(e);
+}
     }
 
     public void GetSecondR()
     {
-        //GameObject face = hit.collider.gameObject;
-        // Make a list of all the sides (lists of face GameObjects)
-       
-        HandModel handm = GetComponent<HandModel>();
-        Hand hand = handm.GetLeapHand();
-        Vector3 coord = hand.Fingers[1].TipPosition.ToVector3();
-        Vector2 Swipe;
-        if (First != Vector3.zero)
+        try
         {
-            //print("segon");
 
-            Second = coord;
-            Swipe = new Vector2(Second.x - First.x, Second.y - First.y);
-            if (LeftSwipe(Swipe))
+            if (concu.Potgirar())
             {
-                readCube.ReadState();
-                if (First.y > 0.5)
+
+                //GameObject face = hit.collider.gameObject;
+                // Make a list of all the sides (lists of face GameObjects)
+
+                HandModel handm = GetComponent<HandModel>();
+                Hand hand = handm.GetLeapHand();
+                Vector3 coord = hand.Fingers[1].TipPosition.ToVector3();
+                Vector2 Swipe;
+                if (First != Vector3.zero)
                 {
-                    print("U");
-                    cubeState.up[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.up, -90);
+                    //print("segon");
+
+                    Second = coord;
+                    Swipe = new Vector3(Second.x - First.x, Second.y - First.y, Second.z - First.z);
+                    if (LeftSwipe(Swipe))
+                    {
+                        readCube.ReadState();
+                        //print("ReadCube: " + readCube);
+                        if (First.y > 0.5)
+                        {
+                            print("U");
+                            //print(cubeState.GetStateString());
+                            //GameObject prova = cubeState.up[4];
+                            //print("U post prova");
+                            //PivotRotation pivotprova = prova.transform.parent.GetComponent<PivotRotation>();
+                            //print("U post pivot");
+                            //pivotprova.StartAutoRotate(cubeState.up, -90);
+                            //print("U post autoRotate");
+                            cubeState.up[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.up, -90);
+                        }
+                        else if (-0.5 <= First.y && First.y <= 0.5)
+                        {
+                            print("E'");
+                            cubeState.up[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.up, 90);
+                            target.transform.Rotate(0, 90, 0, Space.World);
+                            cubeState.down[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.down, -90);
+                        }
+                        else if (First.y < -0.5)
+                        {
+                            print("D'");
+                            cubeState.down[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.down, 90);
+                        }
+                    }
+                    else if (UpLeftSwipe(Swipe))
+                    {
+                        readCube.ReadState();
+                        if (First.x > 0.5)
+                        {
+                            print("B");
+                            cubeState.back[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.back, -90);
+                        }
+                        else if (-0.5 <= First.x && First.x <= 0.5)
+                        {
+                            print("S'");
+                            cubeState.back[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.back, 90);
+                            target.transform.Rotate(90, 0, 0, Space.World);
+                            cubeState.front[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.front, -90);
+                        }
+                        else if (First.x < -0.5)
+                        {
+                            print("F'");
+                            cubeState.front[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.front, 90);
+                        }
+                    }
+                    else if (DownRightSwipe(Swipe))
+                    {
+                        readCube.ReadState();
+                        if (First.x > 0.5)
+                        {
+                            print("B'");
+                            cubeState.back[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.back, 90);
+                        }
+                        else if (-0.5 <= First.x && First.x <= 0.5)
+                        {
+                            print("S");
+                            cubeState.back[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.back, -90);
+                            target.transform.Rotate(-90, 0, 0, Space.World);
+                            cubeState.front[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.front, 90);
+                        }
+                        else if (First.x < -0.5)
+                        {
+                            print("F");
+                            cubeState.front[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.front, -90);
+                        }
+                    }
+                    First = Vector3.zero;
                 }
-                else if (-0.5 <= First.y && First.y <= 0.5)
-                {
-                    print("E'");
-                    cubeState.up[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.up, 90);
-                    target.transform.Rotate(0, 90, 0, Space.World);
-                    cubeState.down[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.down, -90);
-                }
-                else if (First.y < -0.5)
-                {
-                    print("D'");
-                    cubeState.down[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.down, 90);
-                }
+
             }
-            else if (UpLeftSwipe(Swipe))
-            {
-                readCube.ReadState();
-                if (First.x > 0.5)
-                {
-                    print("B");
-                    cubeState.back[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.back, -90);
-                }
-                else if (-0.5 <= First.x && First.x <= 0.5)
-                {
-                    print("S'");
-                    cubeState.back[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.back, 90);
-                    target.transform.Rotate(90, 0, 0, Space.World);
-                    cubeState.front[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.front, -90);
-                }
-                else if (First.x < -0.5)
-                {
-                    print("F'");
-                    cubeState.front[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.front, 90);
-                }
-            }
-            else if (DownRightSwipe(Swipe)) {
-                readCube.ReadState();
-                if (First.x > 0.5)
-                {
-                    print("B'");
-                    cubeState.back[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.back, 90);
-                }
-                else if (-0.5 <= First.x && First.x <= 0.5)
-                {
-                    print("S");
-                    cubeState.back[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.back, -90);
-                    target.transform.Rotate(-90, 0, 0, Space.World);
-                    cubeState.front[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.front, 90);
-                }
-                else if (First.x < -0.5)
-                {
-                    print("F");
-                    cubeState.front[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.front, -90);
-                }
-            }
-            First= Vector3.zero;
         }
-        
-
-
+        catch (Exception e) { print(e); }
     }
 
     public bool InsideCube(Vector3 coord) {
         return -2 < coord.x && coord.x < 2 && -2 < coord.y && coord.y < 2 && -2 < coord.z && coord.z < 2;
     }
 
-    bool LeftSwipe(Vector2 swipe)
+    bool LeftSwipe(Vector3 swipe)
     {
         return swipe.x < 0 && swipe.y > -0.5f && swipe.y < 0.5f;
     }
 
-    bool RightSwipe(Vector2 swipe)//-1, 0.1
+    bool RightSwipe(Vector3 swipe)//-1, 0.1
     {
         return swipe.x < 0 && swipe.y > -0.5f && swipe.y < 0.5f;
     }
 
-    bool UpLeftSwipe(Vector2 swipe)
+    bool UpLeftSwipe(Vector3 swipe)
     {
 
         return swipe.y > 0 && swipe.x < 0f;
     }
 
-    bool UpRightSwipe(Vector2 swipe)
+    bool UpRightSwipe(Vector3 swipe)
     {
         //Possible x<0
         return swipe.y > 0 && swipe.x < 0f;
     }
 
-    bool DownLeftSwipe(Vector2 swipe)
+    bool DownLeftSwipe(Vector3 swipe)
     {
 
         return swipe.y < 0 && swipe.x < 0f;
     }
 
-    bool DownRightSwipe(Vector2 swipe)//-0.3,0.9
+    bool DownRightSwipe(Vector3 swipe)//-0.3,0.9
     {
 
         return swipe.y < 0 && swipe.x > 0f;

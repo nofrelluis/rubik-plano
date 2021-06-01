@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{B2B58FB2-4462-6B0C-A872-40DD957E5FE0}</ProjectGuid>
+    <ProjectGuid>{0550CCD5-A852-1BC5-E57C-86346DDC9635}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -75,6 +75,7 @@
     <Compile Include="Assets\Kociemba\K_SearchRunTime.cs" />
     <Compile Include="Assets\SolveTwoPhase.cs" />
     <Compile Include="Assets\CubeMap.cs" />
+    <Compile Include="Assets\Concurrencia.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -674,15 +675,15 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
-      <Project>{79391AC5-8752-B4CC-F33F-BB9EB1094377}</Project>
+      <Project>{7D5643E8-3965-4587-869E-5075F9B5713B}</Project>
       <Name>Assembly-CSharp-firstpass</Name>
     </ProjectReference>
     <ProjectReference Include="LeapMotion.csproj">
-      <Project>{82AFE9FB-1488-B22A-9B7C-DF002F9C8232}</Project>
+      <Project>{A34D3428-6563-AF3E-07A0-24C77C718463}</Project>
       <Name>LeapMotion</Name>
     </ProjectReference>
     <ProjectReference Include="LeapMotion.LeapCSharp.csproj">
-      <Project>{CDE82D3F-1927-E8B1-9F5C-828EB8F7F2DA}</Project>
+      <Project>{CFA78C51-3705-6EAA-24E7-ADA2F2862C7F}</Project>
       <Name>LeapMotion.LeapCSharp</Name>
     </ProjectReference>
   </ItemGroup>
