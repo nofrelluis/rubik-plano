@@ -5,6 +5,7 @@ using UnityEngine;
 using Leap;
 using Leap.Unity;
 using System;
+using System.Linq.Expressions;
 
 public class RotateCubeHand : MonoBehaviour
 {
@@ -18,9 +19,14 @@ public class RotateCubeHand : MonoBehaviour
     public GameObject target;
     private Concurrencia concu;
 
+    public TutorialScript tutorialScript;
+    private bool block;
+    private string blockString;
+
     // Start is called before the first frame update
     void Start()
     {
+        block = false;
         concu = FindObjectsOfType<Concurrencia>()[0];
     }
 
@@ -38,11 +44,11 @@ public class RotateCubeHand : MonoBehaviour
 
     public void SwipeR()
     {
-        try { 
+        try {
             if (concu.Potgirar())
             {
 
-                //print("SwipeHandR");
+                print("Swipe Hand R");
                 HandModel handm = GetComponent<HandModel>();
                 Hand hand = handm.GetLeapHand();
                 // get the 2D poition of the second mouse click
@@ -54,23 +60,28 @@ public class RotateCubeHand : MonoBehaviour
                 print("SwipeR " + currentSwipe);
 
 
-
-
-                if (LeftSwipe(currentSwipe))
+                if (LeftSwipe(currentSwipe) && (!block || blockString.Equals("L")))
                 {
                     //print("SwipeR L");
                     target.transform.Rotate(0, 90, 0, Space.World);
+                    tutorialScript.MoveDone();
                 }
                 else if (UpLeftSwipe(currentSwipe))
                 {
                     //print("SwipeR UL");
                     target.transform.Rotate(90, 0, 0, Space.World);
+                    tutorialScript.MoveDone();
                 }
                 else if (DownRightSwipe(currentSwipe))
                 {
                     //print("SwipeR DR");
                     target.transform.Rotate(-90, 0, 0, Space.World);
+                    tutorialScript.MoveDone();
                 }
+            }
+            else
+            {
+                print("Swipe Hand R blocked");
             }
         }
         catch (Exception e){
@@ -89,9 +100,9 @@ public class RotateCubeHand : MonoBehaviour
     {
         try
         {
-            if (concu.Potgirar())
+            if (concu.Potgirar() )
             {
-
+                print("Swipe Hand L");
                 HandModel handm = GetComponent<HandModel>();
                 Hand hand = handm.GetLeapHand();
                 // get the 2D poition of the second mouse click
@@ -113,6 +124,10 @@ public class RotateCubeHand : MonoBehaviour
                 {
                     target.transform.Rotate(0, 0, 90, Space.World);
                 }
+
+            }
+            else {
+                print("Swipe Hand L blocked");
 
             }
         }
@@ -164,6 +179,13 @@ public class RotateCubeHand : MonoBehaviour
         return currentSwipe.y < 0 && currentSwipe.x > 0f;
     }
 
+    public void blockMovement(String str) {
+        blockString = str;
+        block = true;
+    }
 
+    public void unblockMovement() {
+        block = false;
+    }
 
 }
