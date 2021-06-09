@@ -1,10 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class CubeMap : MonoBehaviour
 {
+    public RotateBigCube rbc;
+
     private CubeState cubeState;
 
     public Transform up;
@@ -25,16 +28,22 @@ public class CubeMap : MonoBehaviour
     {
         
     }
+
     public void Set()
     {
-        cubeState = FindObjectOfType<CubeState>();
+        if (!rotating())
+        {
+            print("setting!");
+            cubeState = FindObjectOfType<CubeState>();
 
-        UpdateMap(cubeState.front, front);
-        UpdateMap(cubeState.back, back);
-        UpdateMap(cubeState.left, left);
-        UpdateMap(cubeState.right, right);
-        UpdateMap(cubeState.up, up);
-        UpdateMap(cubeState.down, down);
+            UpdateMap(cubeState.front, front);
+            UpdateMap(cubeState.back, back);
+            UpdateMap(cubeState.left, left);
+            UpdateMap(cubeState.right, right);
+            UpdateMap(cubeState.up, up);
+            UpdateMap(cubeState.down, down);
+            print("finnished setting");
+        }
     }
 
 
@@ -43,6 +52,7 @@ public class CubeMap : MonoBehaviour
         int i = 0;
         foreach (Transform map in side)
         {
+            print(face[i]);
             if (face[i].name[0] == 'F')
             {
                 map.GetComponent<Image>().color = new Color(1, 0.5f, 0, 1);
@@ -69,5 +79,9 @@ public class CubeMap : MonoBehaviour
             }
             i++;
         }               
+    }
+
+    public bool rotating() {
+        return rbc.rotating;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq.Expressions;
 using UnityEngine;
 
@@ -13,14 +14,22 @@ public class RotateBigCube : MonoBehaviour
     private float speed = 200f;
     public GameObject target;
 
+    public CubeState cubeState;
+    public ReadCube readCube;
+    public CubeMap cubeMap;
+
     public TutorialScript tutorialScript;
     private bool block;
     private string blockString;
+
+    public bool rotating;
+    private int counter;
 
     // Start is called before the first frame update
     void Start()
     {
         block = false;
+        rotating = false;
     }
 
     // Update is called once per frame
@@ -31,6 +40,13 @@ public class RotateBigCube : MonoBehaviour
             //print("not blocked");
             Swipe();
             Drag();
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                cubeState.up[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.up, -90);
+                target.transform.Rotate(0, -90, 0, Space.World);
+                cubeState.down[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.down, 90);
+            }
+
         }
         else { 
             //print("blocked");
@@ -41,8 +57,10 @@ public class RotateBigCube : MonoBehaviour
 
     void Drag()
     {
+
         if (Input.GetMouseButton(1))
         {
+            print("inside first if drag");
             // while the mouse is held down the cube can be moved around its central axis to provide visual feedback
             mouseDelta = Input.mousePosition - previousMousePosition;
             mouseDelta *= 0.1f; // reduction of rotation speed
@@ -53,8 +71,25 @@ public class RotateBigCube : MonoBehaviour
             // automatically move to the target position
             if (transform.rotation != target.transform.rotation)
             {
+                print("rotating...");
+                rotating = true;
                 var step = speed * Time.deltaTime;
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, target.transform.rotation, step);
+                if (transform.rotation == target.transform.rotation)
+                {
+                    print("stop rottating");
+                    rotating = false;
+                    counter = 50;
+                }
+            }
+            else if (!rotating && counter == 0)
+            {
+                readCube.ReadState();
+                print("lets set!");
+                cubeMap.Set();
+            }
+            else if(!rotating && counter > 0){
+                counter -= 1;
             }
         }
         previousMousePosition = Input.mousePosition;
@@ -70,6 +105,7 @@ public class RotateBigCube : MonoBehaviour
             firstPressPos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
             //print(firstPressPos);
         }
+
         if (Input.GetMouseButtonUp(1))
         {
             // get the 2D poition of the second mouse click
