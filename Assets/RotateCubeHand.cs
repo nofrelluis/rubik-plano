@@ -66,13 +66,13 @@ public class RotateCubeHand : MonoBehaviour
                     target.transform.Rotate(0, 90, 0, Space.World);
                     tutorialScript.MoveDone();
                 }
-                else if (UpLeftSwipe(currentSwipe))
+                else if (UpLeftSwipe(currentSwipe) && (!block || blockString.Equals("UL")))
                 {
                     //print("SwipeR UL");
                     target.transform.Rotate(90, 0, 0, Space.World);
                     tutorialScript.MoveDone();
                 }
-                else if (DownRightSwipe(currentSwipe))
+                else if (DownRightSwipe(currentSwipe) && (!block || blockString.Equals("DR")))
                 {
                     //print("SwipeR DR");
                     target.transform.Rotate(-90, 0, 0, Space.World);

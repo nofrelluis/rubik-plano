@@ -28,12 +28,12 @@ public class RotateBigCube : MonoBehaviour
     {
         if (!block)
         {
-            print("not blocked");
+            //print("not blocked");
             Swipe();
             Drag();
         }
         else { 
-            print("blocked");
+            //print("blocked");
             SwipeBlocked();
             Drag();
         }
