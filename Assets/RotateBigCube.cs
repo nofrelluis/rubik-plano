@@ -40,12 +40,6 @@ public class RotateBigCube : MonoBehaviour
             //print("not blocked");
             Swipe();
             Drag();
-            if (Input.GetKeyDown(KeyCode.A))
-            {
-                cubeState.up[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.up, -90);
-                target.transform.Rotate(0, -90, 0, Space.World);
-                cubeState.down[4].transform.parent.GetComponent<PivotRotation>().StartAutoRotate(cubeState.down, 90);
-            }
 
         }
         else { 

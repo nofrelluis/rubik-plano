@@ -11,7 +11,7 @@ public class Concurrencia : MonoBehaviour
     {
         print("cuncu starto");
         contador = 0;
-        Max_cont = 300;
+        Max_cont = 100;
     }
 
     // Update is called once per frame
