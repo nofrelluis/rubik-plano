@@ -138,7 +138,7 @@ public class RotateCubeHand : MonoBehaviour
                     //normalize the 2d vector
                     currentSwipe.Normalize();
                     print(currentSwipe);
-                    if (RightSwipe(currentSwipe))
+                    if (RightSwipe(currentSwipe) && (!block || blockString.Equals("R")))
                     {
                         target.transform.Rotate(0, -90, 0, Space.World);
                         if (block)
@@ -146,7 +146,7 @@ public class RotateCubeHand : MonoBehaviour
                             tutorialScript.MoveDone();
                         }
                     }
-                    else if (UpRightSwipe(currentSwipe))
+                    else if (UpRightSwipe(currentSwipe) && (!block || blockString.Equals("UR")))
                     {
                         target.transform.Rotate(0, 0, -90, Space.World);
                         if (block)
@@ -154,7 +154,7 @@ public class RotateCubeHand : MonoBehaviour
                             tutorialScript.MoveDone();
                         }
                     }
-                    else if (DownLeftSwipe(currentSwipe))
+                    else if (DownLeftSwipe(currentSwipe) && (!block || blockString.Equals("DL")))
                     {
                         target.transform.Rotate(0, 0, 90, Space.World);
                         if (block)

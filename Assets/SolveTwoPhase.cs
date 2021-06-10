@@ -11,6 +11,7 @@ public class SolveTwoPhase : MonoBehaviour
 
     public GameObject target;
     public RotateBigCube rotateBigCube;
+    public GameObject panel;
 
     // Start is called before the first frame update
     void Start()
@@ -35,7 +36,7 @@ public class SolveTwoPhase : MonoBehaviour
 
     public void Solver()
     {
-
+        
         readCube.ReadState();
 
         // get the state of the cube as a string
@@ -182,7 +183,7 @@ public class SolveTwoPhase : MonoBehaviour
                         //Automate the list
                         Automate.moveList = solutionList;
                         doOnce = false;
-
+                        panel.SetActive(false);
                         break;
                     case 'F':
                         print("- F");
