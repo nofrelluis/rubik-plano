@@ -17,12 +17,13 @@ public class SolveTwoPhase : MonoBehaviour
     {
         readCube = FindObjectOfType<ReadCube>();
         cubeState = FindObjectOfType<CubeState>();
+        rotateBigCube = FindObjectOfType<RotateBigCube>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!rotateBigCube.rotating) 
+        if (!rotateBigCube.rotating)
         {
             if (CubeState.started && doOnce)
             {
@@ -52,7 +53,7 @@ public class SolveTwoPhase : MonoBehaviour
                 print("R");
                 doOnce = true;
                 switch (aux[13])
-                {                  
+                {
                     case 'F':
                         print("- F");
                         target.transform.Rotate(0, 0, -90, Space.World);
@@ -134,7 +135,7 @@ public class SolveTwoPhase : MonoBehaviour
 
                         break;
                 }
-                
+
                 break;
             case 'B':
                 print("B");
@@ -171,7 +172,7 @@ public class SolveTwoPhase : MonoBehaviour
 
                         // First time build the tables
                         solution = SearchRunTime.solution(moveString, out info, buildTables: true);
-                        
+
                         //Every other time
                         //string solution = Search.solution(moveString, out info);
 
@@ -205,9 +206,9 @@ public class SolveTwoPhase : MonoBehaviour
                 break;
         }
 
-        print("info: "+info);
+        print("info: " + info);
         print("solution:" + solution);
-        
+
     }
 
     List<string> StringToList(string solution)

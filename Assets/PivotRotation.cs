@@ -88,7 +88,7 @@ public class PivotRotation : MonoBehaviour
          
     public void Rotate(List<GameObject> side)
     {
-        //print("PivotRotate");
+        print("PivotRotate");
         activeSide = side;
         mouseRef = Input.mousePosition;
         dragging = true;
@@ -99,9 +99,9 @@ public class PivotRotation : MonoBehaviour
 
     public void StartAutoRotate(List<GameObject> side, float angle)
     {
-        //print("AutoRotS");
+        print("AutoRotS");
         cubeState.PickUp(side);
-        //print("AutoRotPickupE");
+        print("AutoRotPickupE");
         Vector3 localForward = Vector3.zero - side[4].transform.parent.transform.localPosition;
         targetQuaternion = Quaternion.AngleAxis(angle, localForward) * transform.localRotation;
         activeSide = side;

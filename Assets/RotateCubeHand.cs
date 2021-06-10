@@ -69,20 +69,31 @@ public class RotateCubeHand : MonoBehaviour
                     if (LeftSwipe(currentSwipe) && (!block || blockString.Equals("L")))
                     {
                         //print("SwipeR L");
+                        print("SwipeL i block = " + block);
                         target.transform.Rotate(0, 90, 0, Space.World);
-                        //tutorialScript.MoveDone();
+                        if (block)
+                        {
+                            print("Arriba if");
+                            tutorialScript.MoveDone();
+                        }
                     }
                     else if (UpLeftSwipe(currentSwipe) && (!block || blockString.Equals("UL")))
                     {
                         //print("SwipeR UL");
                         target.transform.Rotate(90, 0, 0, Space.World);
-                        //tutorialScript.MoveDone();
+                        if (block)
+                        {
+                            tutorialScript.MoveDone();
+                        }
                     }
                     else if (DownRightSwipe(currentSwipe) && (!block || blockString.Equals("DR")))
                     {
                         //print("SwipeR DR");
                         target.transform.Rotate(-90, 0, 0, Space.World);
-                        //tutorialScript.MoveDone();
+                        if (block)
+                        {
+                            tutorialScript.MoveDone();
+                        }
                     }
                     firstPressPos = Vector2.zero;
                 }
@@ -129,18 +140,27 @@ public class RotateCubeHand : MonoBehaviour
                     print(currentSwipe);
                     if (RightSwipe(currentSwipe))
                     {
-                        //print("SwipeL R");
                         target.transform.Rotate(0, -90, 0, Space.World);
+                        if (block)
+                        {
+                            tutorialScript.MoveDone();
+                        }
                     }
                     else if (UpRightSwipe(currentSwipe))
                     {
-                        //print("SwipeL UR");
                         target.transform.Rotate(0, 0, -90, Space.World);
+                        if (block)
+                        {
+                            tutorialScript.MoveDone();
+                        }
                     }
                     else if (DownLeftSwipe(currentSwipe))
                     {
-                        //print("SwipeL DL");
                         target.transform.Rotate(0, 0, 90, Space.World);
+                        if (block)
+                        {
+                            tutorialScript.MoveDone();
+                        }
                     }
                 }
                 firstPressPos = Vector2.zero;
