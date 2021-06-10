@@ -129,14 +129,17 @@ public class RotateCubeHand : MonoBehaviour
                     print(currentSwipe);
                     if (RightSwipe(currentSwipe))
                     {
+                        //print("SwipeL R");
                         target.transform.Rotate(0, -90, 0, Space.World);
                     }
                     else if (UpRightSwipe(currentSwipe))
                     {
+                        //print("SwipeL UR");
                         target.transform.Rotate(0, 0, -90, Space.World);
                     }
                     else if (DownLeftSwipe(currentSwipe))
                     {
+                        //print("SwipeL DL");
                         target.transform.Rotate(0, 0, 90, Space.World);
                     }
                 }

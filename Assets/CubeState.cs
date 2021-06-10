@@ -67,6 +67,7 @@ public class CubeState : MonoBehaviour
 
         string stateString = "";
         stateString += GetSideString(up);
+        print("state string 1: "+stateString);
         stateString += GetSideString(right);
         stateString += GetSideString(front);
         stateString += GetSideString(down);
