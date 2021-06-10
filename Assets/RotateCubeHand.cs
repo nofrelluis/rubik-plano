@@ -10,7 +10,7 @@ using System.Linq.Expressions;
 public class RotateCubeHand : MonoBehaviour
 {
 
-    private Vector2 firstPressPos;
+    private Vector2 firstPressPos = Vector2.zero;
     private Vector2 secondPressPos;
     private Vector2 currentSwipe;
     private Vector3 previousMousePosition;
@@ -39,7 +39,12 @@ public class RotateCubeHand : MonoBehaviour
     public void ActivateR() {
         HandModel handm = GetComponent<HandModel>();
         Hand hand = handm.GetLeapHand();
-        firstPressPos = new Vector2(hand.Fingers[1].TipPosition.x, hand.Fingers[1].TipPosition.y);
+        Vector3 aux = new Vector3(hand.Fingers[1].TipPosition.x, hand.Fingers[1].TipPosition.y, hand.Fingers[1].TipPosition.z);
+        print(aux);
+        if (InsideCube(aux))
+        {
+            firstPressPos = new Vector2(aux.x, aux.y);
+        }
     }
 
     public void SwipeR()
@@ -47,36 +52,39 @@ public class RotateCubeHand : MonoBehaviour
         try {
             if (concu.Potgirar())
             {
-
-                print("Swipe Hand R");
-                HandModel handm = GetComponent<HandModel>();
-                Hand hand = handm.GetLeapHand();
-                // get the 2D poition of the second mouse click
-                secondPressPos = new Vector2(hand.Fingers[1].TipPosition.x, hand.Fingers[1].TipPosition.y);
-                //create a vector from the first and second click positions
-                currentSwipe = new Vector2(secondPressPos.x - firstPressPos.x, secondPressPos.y - firstPressPos.y);
-                //normalize the 2d vector
-                currentSwipe.Normalize();
-                print("SwipeR " + currentSwipe);
-
-
-                if (LeftSwipe(currentSwipe) && (!block || blockString.Equals("L")))
+                if (firstPressPos != Vector2.zero)
                 {
-                    //print("SwipeR L");
-                    target.transform.Rotate(0, 90, 0, Space.World);
-                    tutorialScript.MoveDone();
-                }
-                else if (UpLeftSwipe(currentSwipe) && (!block || blockString.Equals("UL")))
-                {
-                    //print("SwipeR UL");
-                    target.transform.Rotate(90, 0, 0, Space.World);
-                    tutorialScript.MoveDone();
-                }
-                else if (DownRightSwipe(currentSwipe) && (!block || blockString.Equals("DR")))
-                {
-                    //print("SwipeR DR");
-                    target.transform.Rotate(-90, 0, 0, Space.World);
-                    tutorialScript.MoveDone();
+                    print("Swipe Hand R");
+                    HandModel handm = GetComponent<HandModel>();
+                    Hand hand = handm.GetLeapHand();
+                    // get the 2D poition of the second mouse click
+                    secondPressPos = new Vector2(hand.Fingers[1].TipPosition.x, hand.Fingers[1].TipPosition.y);
+                    //create a vector from the first and second click positions
+                    currentSwipe = new Vector2(secondPressPos.x - firstPressPos.x, secondPressPos.y - firstPressPos.y);
+                    //normalize the 2d vector
+                    currentSwipe.Normalize();
+                    print("SwipeR " + currentSwipe);
+
+
+                    if (LeftSwipe(currentSwipe) && (!block || blockString.Equals("L")))
+                    {
+                        //print("SwipeR L");
+                        target.transform.Rotate(0, 90, 0, Space.World);
+                        //tutorialScript.MoveDone();
+                    }
+                    else if (UpLeftSwipe(currentSwipe) && (!block || blockString.Equals("UL")))
+                    {
+                        //print("SwipeR UL");
+                        target.transform.Rotate(90, 0, 0, Space.World);
+                        //tutorialScript.MoveDone();
+                    }
+                    else if (DownRightSwipe(currentSwipe) && (!block || blockString.Equals("DR")))
+                    {
+                        //print("SwipeR DR");
+                        target.transform.Rotate(-90, 0, 0, Space.World);
+                        //tutorialScript.MoveDone();
+                    }
+                    firstPressPos = Vector2.zero;
                 }
             }
             else
@@ -93,7 +101,12 @@ public class RotateCubeHand : MonoBehaviour
     {
         HandModel handm = GetComponent<HandModel>();
         Hand hand = handm.GetLeapHand();
-        firstPressPos = new Vector2(hand.Fingers[1].TipPosition.x, hand.Fingers[1].TipPosition.y);
+        Vector3 aux= new Vector3(hand.Fingers[1].TipPosition.x, hand.Fingers[1].TipPosition.y, hand.Fingers[1].TipPosition.z);
+        //print("aux " + aux);
+        if (InsideCube(aux))
+        {
+            firstPressPos = new Vector2(aux.x, aux.y);
+        }
     }
 
     public void SwipeL()
@@ -105,26 +118,29 @@ public class RotateCubeHand : MonoBehaviour
                 print("Swipe Hand L");
                 HandModel handm = GetComponent<HandModel>();
                 Hand hand = handm.GetLeapHand();
-                // get the 2D poition of the second mouse click
-                secondPressPos = new Vector2(hand.Fingers[1].TipPosition.x, hand.Fingers[1].TipPosition.y);
-                //create a vector from the first and second click positions
-                currentSwipe = new Vector2(secondPressPos.x - firstPressPos.x, secondPressPos.y - firstPressPos.y);
-                //normalize the 2d vector
-                currentSwipe.Normalize();
-                print(currentSwipe);
-                if (RightSwipe(currentSwipe))
+                if (firstPressPos != Vector2.zero)
                 {
-                    target.transform.Rotate(0, -90, 0, Space.World);
+                    // get the 2D poition of the second mouse click
+                    secondPressPos = new Vector2(hand.Fingers[1].TipPosition.x, hand.Fingers[1].TipPosition.y);
+                    //create a vector from the first and second click positions
+                    currentSwipe = new Vector2(secondPressPos.x - firstPressPos.x, secondPressPos.y - firstPressPos.y);
+                    //normalize the 2d vector
+                    currentSwipe.Normalize();
+                    print(currentSwipe);
+                    if (RightSwipe(currentSwipe))
+                    {
+                        target.transform.Rotate(0, -90, 0, Space.World);
+                    }
+                    else if (UpRightSwipe(currentSwipe))
+                    {
+                        target.transform.Rotate(0, 0, -90, Space.World);
+                    }
+                    else if (DownLeftSwipe(currentSwipe))
+                    {
+                        target.transform.Rotate(0, 0, 90, Space.World);
+                    }
                 }
-                else if (UpRightSwipe(currentSwipe))
-                {
-                    target.transform.Rotate(0, 0, -90, Space.World);
-                }
-                else if (DownLeftSwipe(currentSwipe))
-                {
-                    target.transform.Rotate(0, 0, 90, Space.World);
-                }
-
+                firstPressPos = Vector2.zero;
             }
             else {
                 print("Swipe Hand L blocked");
@@ -136,7 +152,12 @@ public class RotateCubeHand : MonoBehaviour
         }
     }
 
-
+    //Comprova que la mà estigui aprop del cub
+    public bool InsideCube(Vector3 coord)
+    {
+        //print("Insidecube" + (-2 < coord.x && coord.x < 2 && -2 < coord.y && coord.y < 2 && -2 < coord.z && coord.z < 2));
+        return -2.5 < coord.x && coord.x < 2.5 && -2.5 < coord.y && coord.y < 2.5 && -2.5 < coord.z && coord.z < 2.5;
+    }
 
     public void Activated() {
         HandModel handm = GetComponent<HandModel>();

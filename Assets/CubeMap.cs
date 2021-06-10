@@ -33,7 +33,7 @@ public class CubeMap : MonoBehaviour
     {
         if (!rotating())
         {
-            print("setting!");
+            //print("setting!");
             cubeState = FindObjectOfType<CubeState>();
 
             UpdateMap(cubeState.front, front);
@@ -42,7 +42,7 @@ public class CubeMap : MonoBehaviour
             UpdateMap(cubeState.right, right);
             UpdateMap(cubeState.up, up);
             UpdateMap(cubeState.down, down);
-            print("finnished setting");
+            //print("finnished setting");
         }
     }
 
@@ -52,7 +52,7 @@ public class CubeMap : MonoBehaviour
         int i = 0;
         foreach (Transform map in side)
         {
-            print(face[i]);
+            //print(face[i]);
             if (face[i].name[0] == 'F')
             {
                 map.GetComponent<Image>().color = new Color(1, 0.5f, 0, 1);

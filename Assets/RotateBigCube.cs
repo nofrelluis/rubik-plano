@@ -54,7 +54,7 @@ public class RotateBigCube : MonoBehaviour
 
         if (Input.GetMouseButton(1))
         {
-            print("inside first if drag");
+            //print("inside first if drag");
             // while the mouse is held down the cube can be moved around its central axis to provide visual feedback
             mouseDelta = Input.mousePosition - previousMousePosition;
             mouseDelta *= 0.1f; // reduction of rotation speed
@@ -65,13 +65,13 @@ public class RotateBigCube : MonoBehaviour
             // automatically move to the target position
             if (transform.rotation != target.transform.rotation)
             {
-                print("rotating...");
+                //print("rotating...");
                 rotating = true;
                 var step = speed * Time.deltaTime;
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, target.transform.rotation, step);
                 if (transform.rotation == target.transform.rotation)
                 {
-                    print("stop rottating");
+                    //print("stop rottating");
                     rotating = false;
                     counter = 50;
                 }
@@ -79,7 +79,7 @@ public class RotateBigCube : MonoBehaviour
             else if (!rotating && counter == 0)
             {
                 readCube.ReadState();
-                print("lets set!");
+                //print("lets set!");
                 cubeMap.Set();
             }
             else if(!rotating && counter > 0){
